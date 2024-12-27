@@ -1,164 +1,3 @@
-<script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { 
-  SunIcon, 
-  MoonIcon, 
-  BriefcaseIcon, 
-  GraduationCapIcon, 
-  AwardIcon, 
-  ArrowUpIcon,
-  LinkIcon,
-  GithubIcon,
-  LinkedinIcon,
-  MailIcon
-} from 'lucide-vue-next'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Button
-} from "@/components/ui/button"
-
-const isDarkMode = ref(false)
-const isLoading = ref(true)
-const showScrollTop = ref(false)
-
-const skills = [
-  { name: 'Vue.js', level: 90, color: 'bg-green-500' },
-  { name: 'TypeScript/JavaScript', level: 85, color: 'bg-blue-500' },
-  { name: 'Tailwind CSS', level: 80, color: 'bg-teal-500' },
-  { name: 'Node.js', level: 75, color: 'bg-yellow-500' },
-  { name: 'C++', level: 75, color: 'bg-purple-500' },
-]
-
-const projects = [
-  { 
-    name: 'Rakshak', 
-    description: 'React-based system for improving patient follow-up and care continuity',
-    tech: ['React', 'Node.js', 'MongoDB'],
-    link: 'https://github.com/yourusername/rakshak'
-  },
-  { 
-    name: 'Scientific Tray Component', 
-    description: 'Stencil.js web component for scientific trays',
-    tech: ['Stencil.js', 'TypeScript', 'Jest'],
-    link: 'https://github.com/yourusername/scientific-tray'
-  },
-  { 
-    name: 'E-commerce Book Application', 
-    description: 'Full-stack Angular and Flask e-commerce platform',
-    tech: ['Angular', 'Flask', 'PostgreSQL'],
-    link: 'https://github.com/yourusername/book-ecommerce'
-  },
-]
-
-const experiences = [
-  {
-    company: 'Persistent Systems',
-    role: 'Senior Software Engineer',
-    duration: 'June 2024 - Present',
-    highlights: [
-      'Reduced application vulnerabilities by 65%',
-      'Slashed unit test execution time by 78%',
-      'Integrated Storybook into Vue.js application',
-    ],
-  },
-  {
-    company: 'Persistent Systems',
-    role: 'Software Engineer',
-    duration: 'June 2022 - June 2024',
-    highlights: [
-      'Developed Stencil.js scientific tray web component',
-      'Architected OOP-based TypeScript solution for autosampler data',
-      'Implemented "Debug Mode" with live editor',
-    ],
-  },
-]
-
-const certifications = [
-  { name: 'Microsoft Certified: Azure Fundamentals', issuer: 'Microsoft', date: 'May 2023' },
-  { name: 'Stanford: Code in Place', issuer: 'Stanford University', date: 'August 2022' },
-]
-
-const toggleDarkMode = () => {
-  isDarkMode.value = !isDarkMode.value
-  localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
-  applyTheme()
-}
-
-const applyTheme = () => {
-  if (isDarkMode.value) {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
-}
-
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-const handleScroll = () => {
-  showScrollTop.value = window.scrollY > 500
-}
-
-const typewriterText = computed(() => [
-  "I build web applications.",
-  "I solve complex problems.",
-  "I create user-friendly interfaces.",
-  "I optimize performance.",
-  "I love coding."
-])
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  
-  setTimeout(() => {
-    isLoading.value = false
-    document.body.style.overflow = 'visible'
-  }, 2000)
-
-  // Check system preference
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const savedTheme = localStorage.getItem('theme')
-  isDarkMode.value = savedTheme === 'dark' || (savedTheme === null && prefersDark)
-  applyTheme()
-
-  // Typewriter effect
-  let currentText = 0
-  let charIndex = 0
-  const typeWriter = () => {
-    const txt = typewriterText.value
-    if (charIndex < txt[currentText].length) {
-      const typewriterEl = document.querySelector(".typewriter")
-      if (typewriterEl) {
-        typewriterEl.innerHTML += txt[currentText].charAt(charIndex)
-        charIndex++
-        setTimeout(typeWriter, 100)
-      }
-    } else {
-      setTimeout(() => {
-        const typewriterEl = document.querySelector(".typewriter")
-        if (typewriterEl) {
-          typewriterEl.innerHTML = ""
-          currentText = (currentText + 1) % txt.length
-          charIndex = 0
-          typeWriter()
-        }
-      }, 2000)
-    }
-  }
-  typeWriter()
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
-</script>
-
 <template>
   <div :class="{ 'dark': isDarkMode }" class="min-h-screen bg-background text-foreground transition-colors duration-300">
     <!-- Loading Screen -->
@@ -212,23 +51,24 @@ onUnmounted(() => {
           <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
         </div>
         
-        <div class="text-center px-4 z-10">
+        <div class="text-center px-4 ">
           <h1 class="hero-title text-7xl font-bold mb-4 text-primary animate-fadeIn">
             Ashit Darurmath
           </h1>
           <p class="hero-subtitle text-3xl text-muted-foreground animate-fadeIn animation-delay-200">Senior Software Engineer</p>
-          <div class="mt-8 h-8">
-            <span class="typewriter text-xl text-muted-foreground"></span>
+          <div class="mt-8 h-48 flex justify-center animate-fadeIn animation-delay-400">
+            <img src="./coding-gif-light.gif" alt="Coding animation" class="h-full dark:hidden">
+            <img src="./coding-gif-light.gif" alt="Coding animation" class="h-full hidden dark:block">
           </div>
-          <div class="mt-8 flex justify-center space-x-4 animate-fadeIn animation-delay-400">
+          <div class="mt-8 flex justify-center space-x-4 animate-fadeIn animation-delay-600">
             <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-primary transition-colors">
-              <GithubIcon class="w-6 h-6" />
+              <GithubIcon class="w-8 h-8" />
             </a>
             <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-primary transition-colors">
-              <LinkedinIcon class="w-6 h-6" />
+              <LinkedinIcon class="w-8 h-8" />
             </a>
             <a href="mailto:your.email@example.com" class="text-muted-foreground hover:text-primary transition-colors">
-              <MailIcon class="w-6 h-6" />
+              <MailIcon class="w-8 h-8" />
             </a>
           </div>
         </div>
@@ -256,34 +96,20 @@ onUnmounted(() => {
           <h2 class="text-4xl font-bold mb-16 text-center text-primary">Skills</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <div v-for="skill in skills" :key="skill.name" class="group">
-              <Card class="h-full transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                <CardContent class="p-6 flex flex-col items-center justify-center h-full">
+              <Card class="h-full transform transition-all duration-300 hover:scale-105 hover:shadow-lg overflow-hidden">
+                <CardContent class="p-6 flex flex-col items-center justify-center h-full relative">
                   <h3 class="text-xl font-semibold mb-4">{{ skill.name }}</h3>
-                  <div class="w-24 h-24 relative mb-4">
-                    <svg class="w-full h-full transform -rotate-90">
-                      <circle
-                        cx="48"
-                        cy="48"
-                        r="44"
-                        stroke-width="8"
-                        fill="transparent"
-                        class="text-muted stroke-current"
-                      />
-                      <circle
-                        cx="48"
-                        cy="48"
-                        r="44"
-                        stroke-width="8"
-                        fill="transparent"
-                        :class="skill.color"
-                        :stroke-dasharray="`${skill.level * 2.76}, 276`"
-                        class="stroke-current transform origin-center transition-all duration-500 ease-out group-hover:stroke-dasharray-276"
-                      />
-                    </svg>
-                    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                      <span class="text-lg font-bold">{{ skill.level }}%</span>
-                    </div>
+                  <div class="w-full h-4 bg-muted rounded-full overflow-hidden">
+                    <div 
+                      :class="skill.color"
+                      class="h-full rounded-full transition-all duration-1000 ease-out"
+                      :style="{ width: `${skillLevels[skill.name]}%` }"
+                    ></div>
                   </div>
+                  <span class="absolute bottom-2 right-2 text-sm font-semibold">
+                    {{ skillLevels[skill.name] }}%
+                  </span>
+                  <div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                 </CardContent>
               </Card>
             </div>
@@ -354,6 +180,9 @@ onUnmounted(() => {
                 </div>
                 <p class="text-muted-foreground">Issued by: {{ cert.issuer }}</p>
                 <p class="text-muted-foreground mt-2">Date: {{ cert.date }}</p>
+                <a :href="cert.link" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center text-primary hover:underline">
+                  View Certificate <LinkIcon class="w-4 h-4 ml-2" />
+                </a>
               </CardContent>
             </Card>
           </div>
@@ -382,19 +211,176 @@ onUnmounted(() => {
   </div>
 </template>
 
+<script setup>
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { 
+  SunIcon, 
+  MoonIcon, 
+  BriefcaseIcon, 
+  GraduationCapIcon, 
+  AwardIcon, 
+  ArrowUpIcon,
+  LinkIcon,
+  GithubIcon,
+  LinkedinIcon,
+  MailIcon
+} from 'lucide-vue-next'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Button
+} from "@/components/ui/button"
+
+const isDarkMode = ref(false)
+const isLoading = ref(true)
+const showScrollTop = ref(false)
+
+const skills = [
+  { name: 'Vue.js', color: 'bg-green-500' },
+  { name: 'TypeScript/JavaScript', color: 'bg-blue-500' },
+  { name: 'Tailwind CSS', color: 'bg-teal-500' },
+  { name: 'Node.js', color: 'bg-yellow-500' },
+  { name: 'C++', color: 'bg-purple-500' },
+  { name: 'Python', color: 'bg-blue-600' },
+  { name: 'PostgreSQL', color: 'bg-blue-400' },
+  { name: 'Git', color: 'bg-orange-500' },
+  { name: 'Docker', color: 'bg-blue-700' },
+]
+
+const skillLevels = ref({
+  'Vue.js': 0,
+  'TypeScript/JavaScript': 0,
+  'Tailwind CSS': 0,
+  'Node.js': 0,
+  'C++': 0,
+  'Python': 0,
+  'PostgreSQL': 0,
+  'Git': 0,
+  'Docker': 0,
+})
+
+const projects = [
+  { 
+    name: 'Rakshak', 
+    description: 'React-based system for improving patient follow-up and care continuity',
+    tech: ['React', 'Node.js', 'MongoDB'],
+    link: 'https://github.com/yourusername/rakshak'
+  },
+  { 
+    name: 'Scientific Tray Component', 
+    description: 'Stencil.js web component for scientific trays',
+    tech: ['Stencil.js', 'TypeScript', 'Jest'],
+    link: 'https://github.com/yourusername/scientific-tray'
+  },
+  { 
+    name: 'E-commerce Book Application', 
+    description: 'Full-stack Angular and Flask e-commerce platform',
+    tech: ['Angular', 'Flask', 'PostgreSQL'],
+    link: 'https://github.com/yourusername/book-ecommerce'
+  },
+]
+
+const experiences = [
+  {
+    company: 'Persistent Systems',
+    role: 'Senior Software Engineer',
+    duration: 'June 2024 - Present',
+    highlights: [
+      'Reduced application vulnerabilities by 65%',
+      'Slashed unit test execution time by 78%',
+      'Integrated Storybook into Vue.js application',
+    ],
+  },
+  {
+    company: 'Persistent Systems',
+    role: 'Software Engineer',
+    duration: 'June 2022 - June 2024',
+    highlights: [
+      'Developed Stencil.js scientific tray web component',
+      'Architected OOP-based TypeScript solution for autosampler data',
+      'Implemented "Debug Mode" with live editor',
+    ],
+  },
+]
+
+const certifications = [
+  {
+    name: 'Google IT Support Professional Certificate',
+    issuer: 'Google',
+    date: 'December 2021',
+    link: 'https://www.credly.com/badges/a5996a9a-0a7a-4a7a-a50a-526665656565'
+  },
+  {
+    name: 'AWS Certified Cloud Practitioner',
+    issuer: 'Amazon Web Services',
+    date: 'March 2023',
+    link: '#'
+  }
+]
+
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value
+  localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
+  applyTheme()
+}
+
+const applyTheme = () => {
+  if (isDarkMode.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const handleScroll = () => {
+  showScrollTop.value = window.scrollY > 500
+}
+
+const animateSkills = () => {
+  skills.forEach(skill => {
+    const targetLevel = Math.floor(Math.random() * 41) + 60 // Random number between 60 and 100
+    const interval = setInterval(() => {
+      if (skillLevels.value[skill.name] < targetLevel) {
+        skillLevels.value[skill.name]++
+      } else {
+        clearInterval(interval)
+      }
+    }, 20)
+  })
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  
+  setTimeout(() => {
+    isLoading.value = false
+    document.body.style.overflow = 'visible'
+    animateSkills()
+  }, 2000)
+
+  // Check system preference
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  const savedTheme = localStorage.getItem('theme')
+  isDarkMode.value = savedTheme === 'dark' || (savedTheme === null && prefersDark)
+  applyTheme()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+</script>
+
 <style>
 .perspective {
   perspective: 1000px;
-}
-
-.typewriter::after {
-  content: '|';
-  animation: blink 0.7s infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
 }
 
 @keyframes fadeIn {
@@ -418,6 +404,10 @@ onUnmounted(() => {
 
 .animation-delay-400 {
   animation-delay: 400ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
 }
 
 .scroll-mt-16 {
