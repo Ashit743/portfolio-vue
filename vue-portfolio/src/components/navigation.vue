@@ -7,7 +7,6 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import darkLight from './ui/dark-light/dark-light.vue';
-import ashitAvatar from './ashitAvatar.vue';
 
 
 </script>

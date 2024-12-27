@@ -212,13 +212,12 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+<script setup lang="ts" >
+import { ref, onMounted, onUnmounted } from 'vue'
 import { 
   SunIcon, 
   MoonIcon, 
   BriefcaseIcon, 
-  GraduationCapIcon, 
   AwardIcon, 
   ArrowUpIcon,
   LinkIcon,
@@ -254,7 +253,7 @@ const skills = [
 
 ]
 
-const skillLevels = ref({
+const skillLevels:any = ref({
   'Vue.js': 0,
   'TypeScript/JavaScript': 0,
   'Tailwind CSS': 0,
