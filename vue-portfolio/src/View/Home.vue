@@ -387,12 +387,6 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
-const setDarkMode = (value: boolean) => {
-  isDarkMode.value = value
-  localStorage.setItem('theme', value ? 'dark' : 'light')
-  applyTheme()
-  closeDarkModeMessage()
-}
 
 const closeDarkModeMessage = () => {
   showDarkModeMessage.value = false
