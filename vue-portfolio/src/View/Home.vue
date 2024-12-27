@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'dark': isDarkMode }" class="min-h-screen bg-background text-foreground transition-colors duration-300">
-    <!-- Loading Screen -->
+    <!-- Loading Screen (unchanged) -->
     <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center bg-background">
       <div class="relative">
         <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -42,17 +42,37 @@
         <Button v-for="item in menuItems" :key="item" variant="ghost" asChild @click="toggleMenu">
           <a :href="`#${item.toLowerCase()}`">{{ item }}</a>
         </Button>
-        <Button 
-          @click="toggleDarkMode" 
-          variant="ghost"
-          class="mt-4"
-        >
-          <SunIcon v-if="isDarkMode" class="w-5 h-5" />
-          <MoonIcon v-else class="w-5 h-5" />
-        </Button>
       </div>
     </div>
 
+    <!-- Dark Mode Toggle for Mobile -->
+    <Button 
+      @click="toggleDarkMode" 
+      variant="outline"
+      class="md:hidden fixed top-1/2 -translate-y-1/2 right-0 p-2 z-30 rounded-l-md"
+    >
+      <SunIcon v-if="isDarkMode" class="w-5 h-5" />
+      <MoonIcon v-else class="w-5 h-5" />
+    </Button>
+
+    <!-- First-time Dark Mode Message -->
+    <div 
+      v-if="showDarkModeMessage" 
+      class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-background border border-border rounded-md shadow-lg p-4 max-w-sm w-full text-center"
+    >
+      <p class="mb-2">Welcome! You can toggle dark mode on or off.</p>
+      <div class="flex justify-center space-x-2">
+        <Button @click="setDarkMode(true)" variant="default">
+          Dark Mode
+        </Button>
+        <Button @click="setDarkMode(false)" variant="outline">
+          Light Mode
+        </Button>
+      </div>
+      <Button @click="closeDarkModeMessage" variant="ghost" class="mt-2">
+        Dismiss
+      </Button>
+    </div>
 
     <main class="pt-16">
       <!-- Hero Section -->
@@ -218,7 +238,7 @@
   </div>
 </template>
 
-<script setup lang="ts" >
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { 
   SunIcon, 
@@ -243,30 +263,30 @@ import {
   Button
 } from "@/components/ui/button"
 import ashitAvatar from '@/components/ashitAvatar.vue'
+
 const isDarkMode = ref(false)
 const isLoading = ref(true)
 const showScrollTop = ref(false)
 const isMenuOpen = ref(false)
+const showDarkModeMessage = ref(false)
 const menuItems = ['About', 'Skills', 'Experience', 'Projects', 'Certifications']
 
 const skills = [
   { name: 'Vue.js', color: 'bg-green-500' },
   { name: 'JavaScript', color: 'bg-yellow-500' },
-  { name: 'Node.js', color: 'bg-green-600' },
+  { name: 'Node.js', colorcolor: 'bg-green-600' },
   { name: 'C++', color: 'bg-purple-500' },
   { name: 'Python', color: 'bg-blue-600' },
   { name: 'DSA', color: 'bg-blue-100' },
-
 ]
 
-const skillLevels:any = ref({
+const skillLevels: any = ref({
   'Vue.js': 0,
-  'TypeScript/JavaScript': 0,
-  'Tailwind CSS': 0,
+  'JavaScript': 0,
   'Node.js': 0,
   'C++': 0,
   'Python': 0,
-  'DSA':0
+  'DSA': 0
 })
 
 const projects = [
@@ -290,7 +310,7 @@ const projects = [
   },
   { 
     name: 'RC Aircraft', 
-    description: 'Remote Controled Aircraft from scratch',
+    description: 'Remote Controlled Aircraft from scratch',
     tech: ['Ansys', 'DSSolidWorks', 'Aero designing'],
     link: 'https://photos.google.com/share/AF1QipOJGlzj4MOYz-9fjMpgN6otGj4hik9tYG1f2k_OKaa2gnPmTY8T6rZBuCLBO_Wz2Q?key=a01zTkotQnlDWFBaTUZvdGhyd2FreHZGMmNKcVRB'
   },
@@ -328,7 +348,7 @@ const certifications = [
   },
   {
     name: 'Mentor Code in Place',
-    issuer: 'Standford',
+    issuer: 'Stanford',
     date: 'June 2023',
     link: 'https://digitalcredential.stanford.edu/check/A0B5BC5F8BFFB834F812B628AB8184381F8816095DD9197F9DAE8B0A00DA71EAc05NQVRyN1kyaXluV201MnRhTlVzSmNXOGRYMDFiMkRjczZZUDJRdDFidzZaaTNQ'
   }
@@ -373,6 +393,18 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
+const setDarkMode = (value: boolean) => {
+  isDarkMode.value = value
+  localStorage.setItem('theme', value ? 'dark' : 'light')
+  applyTheme()
+  closeDarkModeMessage()
+}
+
+const closeDarkModeMessage = () => {
+  showDarkModeMessage.value = false
+  localStorage.setItem('darkModeMessageShown', 'true')
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   
@@ -381,6 +413,12 @@ onMounted(() => {
     document.body.style.overflow = 'visible'
     animateSkills()
   }, 2000)
+
+  // Check if dark mode message has been shown before
+  const darkModeMessageShown = localStorage.getItem('darkModeMessageShown')
+  if (!darkModeMessageShown) {
+    showDarkModeMessage.value = true
+  }
 
   // Check system preference
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
