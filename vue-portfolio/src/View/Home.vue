@@ -57,7 +57,7 @@
 
     <!-- First-time Dark Mode Message -->
     <div 
-      v-if="showDarkModeMessage" 
+      v-if="showDarkModeMessage && !isLoading" 
       class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-background border border-border rounded-md shadow-lg p-4 max-w-sm w-full text-center"
     >
       <p class="mb-2">Welcome! You can toggle dark mode on or off.</p>
