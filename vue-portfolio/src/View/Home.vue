@@ -6,7 +6,11 @@ import {
   BriefcaseIcon, 
   GraduationCapIcon, 
   AwardIcon, 
-  ArrowUpIcon 
+  ArrowUpIcon,
+  LinkIcon,
+  GithubIcon,
+  LinkedinIcon,
+  MailIcon
 } from 'lucide-vue-next'
 import {
   Card,
@@ -23,11 +27,11 @@ const isLoading = ref(true)
 const showScrollTop = ref(false)
 
 const skills = [
-  { name: 'Vue.js', level: 90, color: 'hsl(var(--primary))' },
-  { name: 'TypeScript/JavaScript', level: 85, color: 'hsl(var(--primary))' },
-  { name: 'Tailwind CSS', level: 80, color: 'hsl(var(--primary))' },
-  { name: 'Node.js', level: 75, color: 'hsl(var(--primary))' },
-  { name: 'C++', level: 75, color: 'hsl(var(--primary))' },
+  { name: 'Vue.js', level: 90, color: 'bg-green-500' },
+  { name: 'TypeScript/JavaScript', level: 85, color: 'bg-blue-500' },
+  { name: 'Tailwind CSS', level: 80, color: 'bg-teal-500' },
+  { name: 'Node.js', level: 75, color: 'bg-yellow-500' },
+  { name: 'C++', level: 75, color: 'bg-purple-500' },
 ]
 
 const projects = [
@@ -35,16 +39,19 @@ const projects = [
     name: 'Rakshak', 
     description: 'React-based system for improving patient follow-up and care continuity',
     tech: ['React', 'Node.js', 'MongoDB'],
+    link: 'https://github.com/yourusername/rakshak'
   },
   { 
     name: 'Scientific Tray Component', 
     description: 'Stencil.js web component for scientific trays',
     tech: ['Stencil.js', 'TypeScript', 'Jest'],
+    link: 'https://github.com/yourusername/scientific-tray'
   },
   { 
     name: 'E-commerce Book Application', 
     description: 'Full-stack Angular and Flask e-commerce platform',
     tech: ['Angular', 'Flask', 'PostgreSQL'],
+    link: 'https://github.com/yourusername/book-ecommerce'
   },
 ]
 
@@ -71,9 +78,23 @@ const experiences = [
   },
 ]
 
+const certifications = [
+  { name: 'Microsoft Certified: Azure Fundamentals', issuer: 'Microsoft', date: 'May 2023' },
+  { name: 'Stanford: Code in Place', issuer: 'Stanford University', date: 'August 2022' },
+]
+
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value
-  document.documentElement.classList.toggle('dark')
+  localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light')
+  applyTheme()
+}
+
+const applyTheme = () => {
+  if (isDarkMode.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
 }
 
 const scrollToTop = () => {
@@ -99,6 +120,12 @@ onMounted(() => {
     isLoading.value = false
     document.body.style.overflow = 'visible'
   }, 2000)
+
+  // Check system preference
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  const savedTheme = localStorage.getItem('theme')
+  isDarkMode.value = savedTheme === 'dark' || (savedTheme === null && prefersDark)
+  applyTheme()
 
   // Typewriter effect
   let currentText = 0
@@ -133,7 +160,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="{ 'dark': isDarkMode }" class="min-h-screen bg-background text-foreground">
+  <div :class="{ 'dark': isDarkMode }" class="min-h-screen bg-background text-foreground transition-colors duration-300">
     <!-- Loading Screen -->
     <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center bg-background">
       <div class="relative">
@@ -161,6 +188,9 @@ onUnmounted(() => {
           <Button variant="ghost" asChild>
             <a href="#projects">Projects</a>
           </Button>
+          <Button variant="ghost" asChild>
+            <a href="#certifications">Certifications</a>
+          </Button>
         </div>
       </div>
     </nav>
@@ -182,20 +212,31 @@ onUnmounted(() => {
           <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
         </div>
         
-        <div class="text-center px-4">
-          <h1 class="hero-title text-7xl font-bold mb-4 text-primary">
+        <div class="text-center px-4 z-10">
+          <h1 class="hero-title text-7xl font-bold mb-4 text-primary animate-fadeIn">
             Ashit Darurmath
           </h1>
-          <p class="hero-subtitle text-3xl text-muted-foreground">Senior Software Engineer</p>
+          <p class="hero-subtitle text-3xl text-muted-foreground animate-fadeIn animation-delay-200">Senior Software Engineer</p>
           <div class="mt-8 h-8">
             <span class="typewriter text-xl text-muted-foreground"></span>
+          </div>
+          <div class="mt-8 flex justify-center space-x-4 animate-fadeIn animation-delay-400">
+            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-primary transition-colors">
+              <GithubIcon class="w-6 h-6" />
+            </a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-primary transition-colors">
+              <LinkedinIcon class="w-6 h-6" />
+            </a>
+            <a href="mailto:your.email@example.com" class="text-muted-foreground hover:text-primary transition-colors">
+              <MailIcon class="w-6 h-6" />
+            </a>
           </div>
         </div>
       </section>
 
       <div class="container mx-auto px-4 py-16">
         <!-- About Section -->
-        <section id="about" class="mb-16">
+        <section id="about" class="mb-16 scroll-mt-16">
           <Card>
             <CardHeader>
               <CardTitle class="text-3xl font-bold text-center">About Me</CardTitle>
@@ -211,26 +252,50 @@ onUnmounted(() => {
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="mb-32">
+        <section id="skills" class="mb-32 scroll-mt-16">
           <h2 class="text-4xl font-bold mb-16 text-center text-primary">Skills</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <Card v-for="skill in skills" :key="skill.name" class="group perspective">
-              <CardContent class="p-6">
-                <h3 class="text-xl font-semibold mb-4">{{ skill.name }}</h3>
-                <div class="w-full bg-muted rounded-full h-3">
-                  <div class="h-3 rounded-full transition-all duration-300 bg-primary"
-                       :style="{ width: `${skill.level}%` }"></div>
-                </div>
-              </CardContent>
-            </Card>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div v-for="skill in skills" :key="skill.name" class="group">
+              <Card class="h-full transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                <CardContent class="p-6 flex flex-col items-center justify-center h-full">
+                  <h3 class="text-xl font-semibold mb-4">{{ skill.name }}</h3>
+                  <div class="w-24 h-24 relative mb-4">
+                    <svg class="w-full h-full transform -rotate-90">
+                      <circle
+                        cx="48"
+                        cy="48"
+                        r="44"
+                        stroke-width="8"
+                        fill="transparent"
+                        class="text-muted stroke-current"
+                      />
+                      <circle
+                        cx="48"
+                        cy="48"
+                        r="44"
+                        stroke-width="8"
+                        fill="transparent"
+                        :class="skill.color"
+                        :stroke-dasharray="`${skill.level * 2.76}, 276`"
+                        class="stroke-current transform origin-center transition-all duration-500 ease-out group-hover:stroke-dasharray-276"
+                      />
+                    </svg>
+                    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                      <span class="text-lg font-bold">{{ skill.level }}%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </section>
 
         <!-- Experience Section -->
-        <section id="experience" class="mb-16">
+        <section id="experience" class="mb-16 scroll-mt-16">
           <h2 class="text-3xl font-bold mb-8 text-center text-primary">Experience</h2>
           <div class="space-y-8">
-            <Card v-for="(exp, index) in experiences" :key="index">
+            <Card v-for="(exp, index) in experiences" :key="index"
+                  class="transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
               <CardContent class="p-6">
                 <div class="flex items-center mb-4">
                   <BriefcaseIcon class="w-6 h-6 mr-2 text-primary" />
@@ -238,7 +303,12 @@ onUnmounted(() => {
                 </div>
                 <p class="text-muted-foreground mb-4">{{ exp.duration }}</p>
                 <ul class="list-disc list-inside text-muted-foreground">
-                  <li v-for="highlight in exp.highlights" :key="highlight">{{ highlight }}</li>
+                  <li v-for="(highlight, hIndex) in exp.highlights" :key="hIndex" 
+                      class="opacity-0 transform translate-y-4"
+                      :class="{'animate-fadeIn': !isLoading}"
+                      :style="{ animationDelay: `${hIndex * 100 + 200}ms` }">
+                    {{ highlight }}
+                  </li>
                 </ul>
               </CardContent>
             </Card>
@@ -246,53 +316,47 @@ onUnmounted(() => {
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="py-20">
+        <section id="projects" class="py-20 scroll-mt-16">
           <h2 class="text-4xl font-bold text-center mb-16 text-primary">Featured Projects</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card v-for="project in projects" 
                   :key="project.name"
-                  class="transform hover:scale-105 transition-all duration-300">
-              <CardContent class="p-6">
+                  class="transform hover:scale-105 transition-all duration-300 hover:shadow-lg">
+              <CardContent class="p-6 flex flex-col h-full">
                 <h3 class="text-2xl font-bold mb-4">{{ project.name }}</h3>
-                <p class="text-muted-foreground mb-4">{{ project.description }}</p>
-                <div class="flex flex-wrap gap-2">
+                <p class="text-muted-foreground mb-4 flex-grow">{{ project.description }}</p>
+                <div class="flex flex-wrap gap-2 mb-4">
                   <span v-for="tech in project.tech" 
                         :key="tech"
                         class="px-3 py-1 rounded-full text-sm bg-primary/20 text-primary">
                     {{ tech }}
                   </span>
                 </div>
+                <a :href="project.link" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center text-primary hover:underline mt-auto">
+                  View Project <LinkIcon class="w-4 h-4 ml-2" />
+                </a>
               </CardContent>
             </Card>
           </div>
         </section>
 
-        <!-- Education Section -->
-        <section class="mt-16">
-          <Card>
-            <CardHeader>
-              <CardTitle class="text-3xl font-bold text-center">Education & Certifications</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div class="flex items-center mb-4">
-                <GraduationCapIcon class="w-6 h-6 mr-2 text-primary" />
-                <h3 class="text-xl font-semibold">Bachelor's in Electronics and Communication Engineering</h3>
-              </div>
-              <p class="text-muted-foreground mb-2">KLS Gogte Institute of Technology, Belagavi, India</p>
-              <p class="text-muted-foreground">CGPA - 8.76</p>
-              
-              <div class="mt-6 space-y-4">
-                <div class="flex items-center">
+        <!-- Certifications Section -->
+        <section id="certifications" class="mt-16 scroll-mt-16">
+          <h2 class="text-3xl font-bold mb-8 text-center text-primary">Certifications</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card v-for="cert in certifications" :key="cert.name"
+                  class="transform hover:scale-105 transition-all duration-300 hover:shadow-lg">
+              <CardContent class="p-6">
+                <div class="flex items-center mb-4">
                   <AwardIcon class="w-6 h-6 mr-2 text-primary" />
-                  <p class="text-muted-foreground">Microsoft Certified: Azure Fundamentals</p>
+                  <h3 class="text-xl font-semibold">{{ cert.name }}</h3>
                 </div>
-                <div class="flex items-center">
-                  <AwardIcon class="w-6 h-6 mr-2 text-primary" />
-                  <p class="text-muted-foreground">Stanford: Code in Place</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                <p class="text-muted-foreground">Issued by: {{ cert.issuer }}</p>
+                <p class="text-muted-foreground mt-2">Date: {{ cert.date }}</p>
+              </CardContent>
+            </Card>
+          </div>
         </section>
       </div>
     </main>
@@ -331,5 +395,32 @@ onUnmounted(() => {
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.scroll-mt-16 {
+  scroll-margin-top: 4rem;
 }
 </style>
