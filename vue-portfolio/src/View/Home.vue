@@ -13,26 +13,27 @@
     <!-- Navigation Bar -->
     <nav class="bg-background/80 backdrop-blur-xl p-4 fixed w-full z-10 border-b border-border">
       <div class="container mx-auto flex justify-between items-center">
-        <a href="#" class="text-2xl font-bold text-primary">AD</a>
-        <div class="space-x-4">
-          <Button variant="ghost" asChild>
-            <a href="#about">About</a>
-          </Button>
-          <Button variant="ghost" asChild>
-            <a href="#skills">Skills</a>
-          </Button>
-          <Button variant="ghost" asChild>
-            <a href="#experience">Experience</a>
-          </Button>
-          <Button variant="ghost" asChild>
-            <a href="#projects">Projects</a>
-          </Button>
-          <Button variant="ghost" asChild>
-            <a href="#certifications">Certifications</a>
+        <a href="#" class="text-2xl font-bold text-primary"><ashitAvatar/></a>
+        <Button @click="toggleMenu" variant="ghost" class="md:hidden">
+          <MenuIcon v-if="!isMenuOpen" class="w-6 h-6" />
+          <XIcon v-else class="w-6 h-6" />
+        </Button>
+        <div class="hidden md:flex space-x-4">
+          <Button v-for="item in menuItems" :key="item" variant="ghost" asChild>
+            <a :href="`#${item.toLowerCase()}`">{{ item }}</a>
           </Button>
         </div>
       </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div v-if="isMenuOpen" class="fixed inset-0 z-20 bg-background/95 backdrop-blur-sm md:hidden">
+      <div class="flex flex-col items-center justify-center h-full space-y-4">
+        <Button v-for="item in menuItems" :key="item" variant="ghost" asChild @click="toggleMenu">
+          <a :href="`#${item.toLowerCase()}`">{{ item }}</a>
+        </Button>
+      </div>
+    </div>
 
     <Button 
       @click="toggleDarkMode" 
@@ -45,30 +46,29 @@
     
     <main class="pt-16">
       <!-- Hero Section -->
-      <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section class="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
         <div class="hero-bg-shapes absolute inset-0 z-0">
-          <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl animate-pulse"></div>
-          <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
+          <div class="absolute top-1/4 left-1/4 w-32 md:w-64 h-32 md:h-64 bg-primary/10 rounded-full filter blur-3xl animate-pulse"></div>
+          <div class="absolute bottom-1/4 right-1/4 w-32 md:w-64 h-32 md:h-64 bg-primary/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
         </div>
         
-        <div class="text-center px-4 ">
-          <h1 class="hero-title text-7xl font-bold mb-4 text-primary animate-fadeIn">
+        <div class="text-center">
+          <h1 class="hero-title text-4xl md:text-7xl font-bold mb-4 text-primary animate-fadeIn">
             Ashit Darurmath
           </h1>
-          <p class="hero-subtitle text-3xl text-muted-foreground animate-fadeIn animation-delay-200">Senior Software Engineer</p>
-          <div class="mt-8 h-48 flex justify-center animate-fadeIn animation-delay-400">
-            <img src="./coding-gif-light.gif" alt="Coding animation" class="h-full dark:hidden">
-            <img src="./coding-gif-light.gif" alt="Coding animation" class="h-full hidden dark:block">
+          <p class="hero-subtitle text-xl md:text-3xl text-muted-foreground animate-fadeIn animation-delay-200">Senior Software Engineer</p>
+          <div class="mt-8 h-32 md:h-48 flex justify-center animate-fadeIn animation-delay-400">
+            <img src="./coding-gif-light.gif" alt="Coding animation" class="h-full ">
           </div>
           <div class="mt-8 flex justify-center space-x-4 animate-fadeIn animation-delay-600">
-            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-primary transition-colors">
-              <GithubIcon class="w-8 h-8" />
+            <a href="https://github.com/Ashit743" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-primary transition-colors">
+              <GithubIcon class="w-6 h-6 md:w-8 md:h-8" />
             </a>
-            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-primary transition-colors">
-              <LinkedinIcon class="w-8 h-8" />
+            <a href="https://www.linkedin.com/in/ashit-darurmath/" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-primary transition-colors">
+              <LinkedinIcon class="w-6 h-6 md:w-8 md:h-8" />
             </a>
-            <a href="mailto:your.email@example.com" class="text-muted-foreground hover:text-primary transition-colors">
-              <MailIcon class="w-8 h-8" />
+            <a href="mailto:ashitsdarurmath@gmail.com" class="text-muted-foreground hover:text-primary transition-colors">
+              <MailIcon class="w-6 h-6 md:w-8 md:h-8" />
             </a>
           </div>
         </div>
@@ -106,9 +106,10 @@
                       :style="{ width: `${skillLevels[skill.name]}%` }"
                     ></div>
                   </div>
-                  <span class="absolute bottom-2 right-2 text-sm font-semibold">
-                    {{ skillLevels[skill.name] }}%
-                  </span>
+
+
+
+
                   <div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                 </CardContent>
               </Card>
@@ -223,7 +224,9 @@ import {
   LinkIcon,
   GithubIcon,
   LinkedinIcon,
-  MailIcon
+  MailIcon,
+  MenuIcon,
+  XIcon
 } from 'lucide-vue-next'
 import {
   Card,
@@ -234,21 +237,21 @@ import {
 import {
   Button
 } from "@/components/ui/button"
-
+import ashitAvatar from '@/components/ashitAvatar.vue'
 const isDarkMode = ref(false)
 const isLoading = ref(true)
 const showScrollTop = ref(false)
+const isMenuOpen = ref(false)
+const menuItems = ['About', 'Skills', 'Experience', 'Projects', 'Certifications']
 
 const skills = [
   { name: 'Vue.js', color: 'bg-green-500' },
-  { name: 'TypeScript/JavaScript', color: 'bg-blue-500' },
-  { name: 'Tailwind CSS', color: 'bg-teal-500' },
-  { name: 'Node.js', color: 'bg-yellow-500' },
+  { name: 'JavaScript', color: 'bg-yellow-500' },
+  { name: 'Node.js', color: 'bg-green-600' },
   { name: 'C++', color: 'bg-purple-500' },
   { name: 'Python', color: 'bg-blue-600' },
-  { name: 'PostgreSQL', color: 'bg-blue-400' },
-  { name: 'Git', color: 'bg-orange-500' },
-  { name: 'Docker', color: 'bg-blue-700' },
+  { name: 'DSA', color: 'bg-blue-100' },
+
 ]
 
 const skillLevels = ref({
@@ -258,29 +261,33 @@ const skillLevels = ref({
   'Node.js': 0,
   'C++': 0,
   'Python': 0,
-  'PostgreSQL': 0,
-  'Git': 0,
-  'Docker': 0,
+  'DSA':0
 })
 
 const projects = [
   { 
     name: 'Rakshak', 
     description: 'React-based system for improving patient follow-up and care continuity',
-    tech: ['React', 'Node.js', 'MongoDB'],
-    link: 'https://github.com/yourusername/rakshak'
+    tech: ['React', 'flask', 'GenAI', 'python', 'ML','HTML/CSS','JavaScript'],
+    link: 'https://prakshak-1.onrender.com/'
   },
   { 
-    name: 'Scientific Tray Component', 
-    description: 'Stencil.js web component for scientific trays',
-    tech: ['Stencil.js', 'TypeScript', 'Jest'],
-    link: 'https://github.com/yourusername/scientific-tray'
+    name: 'BlinkPy', 
+    description: 'A Open Cv webapp which can reduce eye strain',
+    tech: ['Stencil.js', 'TypeScript', 'python', ''],
+    link: 'https://devpost.com/software/blink-4n2xjv'
   },
   { 
-    name: 'E-commerce Book Application', 
-    description: 'Full-stack Angular and Flask e-commerce platform',
-    tech: ['Angular', 'Flask', 'PostgreSQL'],
-    link: 'https://github.com/yourusername/book-ecommerce'
+    name: 'Gesture Controlled Motors', 
+    description: 'Gesture Controlled industrial equipments to reduce risk',
+    tech: ['python', 'HuggingFace', 'OpenCV', 'CVZone'],
+    link: 'https://photos.google.com/share/AF1QipP_S4tBr2MxYk4Ch9NT1PnwEzFwQy5VU5IOEhN2PEXPYz45QJi5BEEUTzebgP3CcA?key=THoxR1o2bUphcW5iem54Snp2RENzbmpqVGdSM1ZR'
+  },
+  { 
+    name: 'RC Aircraft', 
+    description: 'Remote Controled Aircraft from scratch',
+    tech: ['Ansys', 'DSSolidWorks', 'Aero designing'],
+    link: 'https://photos.google.com/share/AF1QipOJGlzj4MOYz-9fjMpgN6otGj4hik9tYG1f2k_OKaa2gnPmTY8T6rZBuCLBO_Wz2Q?key=a01zTkotQnlDWFBaTUZvdGhyd2FreHZGMmNKcVRB'
   },
 ]
 
@@ -309,16 +316,16 @@ const experiences = [
 
 const certifications = [
   {
-    name: 'Google IT Support Professional Certificate',
-    issuer: 'Google',
-    date: 'December 2021',
-    link: 'https://www.credly.com/badges/a5996a9a-0a7a-4a7a-a50a-526665656565'
+    name: 'Azure Fundamentals',
+    issuer: 'Microsoft',
+    date: 'July 2022',
+    link: 'https://www.credly.com/badges/4980c817-86d5-4a0f-94fe-a84f7def1418/public_url'
   },
   {
-    name: 'AWS Certified Cloud Practitioner',
-    issuer: 'Amazon Web Services',
-    date: 'March 2023',
-    link: '#'
+    name: 'Mentor Code in Place',
+    issuer: 'Standford',
+    date: 'June 2023',
+    link: 'https://digitalcredential.stanford.edu/check/A0B5BC5F8BFFB834F812B628AB8184381F8816095DD9197F9DAE8B0A00DA71EAc05NQVRyN1kyaXluV201MnRhTlVzSmNXOGRYMDFiMkRjczZZUDJRdDFidzZaaTNQ'
   }
 ]
 
@@ -355,6 +362,10 @@ const animateSkills = () => {
       }
     }, 20)
   })
+}
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
 }
 
 onMounted(() => {
@@ -413,4 +424,14 @@ onUnmounted(() => {
 .scroll-mt-16 {
   scroll-margin-top: 4rem;
 }
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-subtitle {
+    font-size: 1.25rem;
+  }
+}
 </style>
+
