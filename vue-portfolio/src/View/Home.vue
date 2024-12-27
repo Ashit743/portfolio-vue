@@ -14,13 +14,23 @@
     <nav class="bg-background/80 backdrop-blur-xl p-4 fixed w-full z-10 border-b border-border">
       <div class="container mx-auto flex justify-between items-center">
         <a href="#" class="text-2xl font-bold text-primary"><ashitAvatar/></a>
-        <Button @click="toggleMenu" variant="ghost" class="md:hidden">
-          <MenuIcon v-if="!isMenuOpen" class="w-6 h-6" />
-          <XIcon v-else class="w-6 h-6" />
-        </Button>
-        <div class="hidden md:flex space-x-4">
-          <Button v-for="item in menuItems" :key="item" variant="ghost" asChild>
-            <a :href="`#${item.toLowerCase()}`">{{ item }}</a>
+        <div class="flex items-center gap-4">
+          <div class="hidden md:flex space-x-4">
+            <Button v-for="item in menuItems" :key="item" variant="ghost" asChild>
+              <a :href="`#${item.toLowerCase()}`">{{ item }}</a>
+            </Button>
+          </div>
+          <Button 
+            @click="toggleDarkMode" 
+            variant="ghost"
+            class="hidden md:flex"
+          >
+            <SunIcon v-if="isDarkMode" class="w-5 h-5" />
+            <MoonIcon v-else class="w-5 h-5" />
+          </Button>
+          <Button @click="toggleMenu" variant="ghost" class="md:hidden">
+            <MenuIcon v-if="!isMenuOpen" class="w-6 h-6" />
+            <XIcon v-else class="w-6 h-6" />
           </Button>
         </div>
       </div>
@@ -32,18 +42,18 @@
         <Button v-for="item in menuItems" :key="item" variant="ghost" asChild @click="toggleMenu">
           <a :href="`#${item.toLowerCase()}`">{{ item }}</a>
         </Button>
+        <Button 
+          @click="toggleDarkMode" 
+          variant="ghost"
+          class="mt-4"
+        >
+          <SunIcon v-if="isDarkMode" class="w-5 h-5" />
+          <MoonIcon v-else class="w-5 h-5" />
+        </Button>
       </div>
     </div>
 
-    <Button 
-      @click="toggleDarkMode" 
-      variant="outline"
-      class="fixed top-20 right-4 p-2 z-10"
-    >
-      <SunIcon v-if="isDarkMode" class="w-6 h-6" />
-      <MoonIcon v-else class="w-6 h-6" />
-    </Button>
-    
+
     <main class="pt-16">
       <!-- Hero Section -->
       <section class="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
@@ -106,10 +116,6 @@
                       :style="{ width: `${skillLevels[skill.name]}%` }"
                     ></div>
                   </div>
-
-
-
-
                   <div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
                 </CardContent>
               </Card>
