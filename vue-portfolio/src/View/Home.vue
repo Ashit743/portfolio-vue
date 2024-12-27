@@ -62,12 +62,6 @@
     >
       <p class="mb-2">Welcome! You can toggle dark mode on or off.</p>
       <div class="flex justify-center space-x-2">
-        <Button @click="setDarkMode(true)" variant="default">
-          Dark Mode
-        </Button>
-        <Button @click="setDarkMode(false)" variant="outline">
-          Light Mode
-        </Button>
       </div>
       <Button @click="closeDarkModeMessage" variant="ghost" class="mt-2">
         Dismiss
