@@ -150,12 +150,12 @@
                 </div>
                 <p class="text-muted-foreground mb-4">{{ exp.duration }}</p>
                 <ul class="list-disc list-inside text-muted-foreground">
-                  <li v-for="(highlight, hIndex) in exp.highlights" :key="hIndex" 
+                  <!-- <li v-for="(highlight, hIndex) in exp.highlights" :key="hIndex" 
                       class="opacity-0 transform translate-y-4"
                       :class="{'animate-fadeIn': !isLoading}"
                       :style="{ animationDelay: `${hIndex * 100 + 200}ms` }">
                     {{ highlight }}
-                  </li>
+                  </li> -->
                 </ul>
               </CardContent>
             </Card>
@@ -268,7 +268,7 @@ const menuItems = ['About', 'Skills', 'Experience', 'Projects', 'Certifications'
 const skills = [
   { name: 'Vue.js', color: 'bg-green-500' },
   { name: 'JavaScript', color: 'bg-yellow-500' },
-  { name: 'Node.js', colorcolor: 'bg-green-600' },
+  { name: 'Node.js', color: 'bg-green-600' },
   { name: 'C++', color: 'bg-purple-500' },
   { name: 'Python', color: 'bg-blue-600' },
   { name: 'DSA', color: 'bg-blue-100' },
